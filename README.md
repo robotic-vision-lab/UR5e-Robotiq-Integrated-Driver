@@ -7,11 +7,14 @@ the toolport available on the robot arms' wrist.
 
 ## System Requirements
 
+> :warning: **Only e-Series robots are capable of using the tool port!**
+> 
 You must complete the following steps before using this repository:
 
 1. Remove any Robotiq related URCap present on the robot controller via the teach pendant.
 2. Complete the robot side setup as instructed by [`ur_robot_driver`
    documentation](https://docs.ros.org/en/ros2_packages/humble/api/ur_robot_driver/setup_tool_communication.html).
+
 
 ## Quick Start
 
@@ -21,40 +24,17 @@ You must complete the following steps before using this repository:
 user@host:~$ git clone https://github.com/robotic-vision-lab/UR-Robotiq-Integrated-Driver.git
 ```
 
-2. Build the Docker image
+2. Run the Docker container
 
 ```console
-user@host:~$ cd UR-Robotiq-Integrated-Driver/docker
-user@host:~/UR-Robotiq-Integrated-Driver/docker$ docker build -t rvl-ur-robotiq-driver:latest
-# [...]
-user@host:~/UR-Robotiq-Integrated-Driver/docker$ cd ..
-user@host:~/UR-Robotiq-Integrated-Driver$
+user@host:~/UR-Robotiq-Integrated-Driver$ ./docker/run.sh
+
+root@cb0ae6649502:/#
 ```
 
-3. Run the Docker container
+3. Build the ROS 2 workspace inside the Docker container
 
 ```console
-user@host:~/UR-Robotiq-Integrated-Driver$ docker run \
---rm \
---tty \
---interactive \
---network host \
---privileged \
---name rvl-ur-robotiq-container \
---env DISPLAY=$DISPLAY \
---volume /tmp/.X11-unix:/tmp/.X11-unix \
---volume $(pwd)/colcon_ws:/root/colcon_ws \
-rvl-ur-robotiq-driver:latest \
-bash
-
-root@host:/#
-```
-
-4. Build the ROS 2 workspace inside the Docker container
-
-```console
-root@host:/# cd /root/colcon_ws
-root@host:~/colcon_ws# source /opt/ros/${ROS_DISTRO}/setup.bash
 root@host:~/colcon_ws# apt-get update
 root@host:~/colcon_ws# rosdep update
 root@host:~/colcon_ws# rosdep install --from-paths src --ignore-src -r -y
@@ -62,14 +42,24 @@ root@host:~/colcon_ws# colcon build --symlink-install
 root@host:~/colcon_ws# source install/setup.bash
 ```
 
+4. Set the robot parameters
+
+```bash
+export UR_IP= # robot IP address e.g., 192.168.1.199
+export UR_HOSTNAME=  # robot network hostname e.g., ur-20224536182
+export UR_TYPE= # ur robot type, one of [ur3, ur3e, ur5, ur5e, ur10, ur10e, ur16e, ur20, ur30]
+export REVERSE_IP= # host (your PC) IP address e.g., 192.168.1.99
+```
+
 5. Start `ur_robot_driver` with tool communication enabled
 
 ```console
-root@host:~/colcon_ws# ros2 launch ur_robot_driver ur_control.launch.py ur_type:=UR_TYPE robot_ip:=ROBOT_IP use_tool_communication:=true
+root@host:~/colcon_ws# ros2 launch ur_robot_driver ur_control.launch.py ur_type:=$UR_TYPE robot_ip:=$UR_IP reverse_ip:=$REVERSE_IP use_tool_communication:=true
 ```
 
-Replace `UR_TYPE` with the type of the UR robot arm you are using, e.g. `ur5e`. Replace `ROBOT_IP` with the IP address
-of the robot arm.
+`UR_HOSTNAME` may be used instead of `UR_IP` if your network resolves it.
+
+`REVERSE_IP` is needed when using a docker container on Windows, where `--network host` is unavailable and only needed when you are running `external_control`.
 
 6. Start `rvl_ur_robotiq_driver` controller node
 
@@ -77,7 +67,6 @@ In a ***new terminal***, run the following commands:
 
 ```console
 user@host:~$ docker exec -it rvl-ur-robotiq-container bash
-root@host:/# cd /root/colcon_ws
 root@host:~/colcon_ws# source install/setup.bash
 root@host:~/colcon_ws# ros2 run rvl_robotiq_driver robotiq_controller
 ```
@@ -150,7 +139,7 @@ A raw BibTex entry is also provided below:
 @software{tram2023ur,
   author={Tram, Minh},
   title={{UR-Robotiq Integrated Driver}},
-  url={https://github.com/robotic-vision-lab/UR-Robotiq-Integrated-Driver}
+  url={https://github.com/robotic-vision-lab/UR-Robotiq-Integrated-Driver},
   version={1.0.0},
   year={2023}
 }
