@@ -54,3 +54,6 @@ CATKIN_IGNORE
 colcon_ws/build
 colcon_ws/install
 colcon_ws/log
+
+# VSCode workspace settings
+.vscode/

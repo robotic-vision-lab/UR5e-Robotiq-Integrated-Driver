@@ -3,7 +3,7 @@
 <package format="3">
   <name>rvl_robotiq_msgs</name>
   <version>1.0.0</version>
-  <description>Messages, services, and actions description for RVL Robotiq Driver</description>
+  <description>Messages, services, and actions description for UT Arlington Robotic Vision Lab Robotiq gripper driver</description>
   <maintainer email="minh.tram@mavs.uta.edu">Minh Tram</maintainer>
   <license>Apache License 2.0</license>
 

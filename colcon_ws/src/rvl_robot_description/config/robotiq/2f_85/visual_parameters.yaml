@@ -1,0 +1,109 @@
+# base_link = palm
+# outer_knuckle = knuckle
+# outer_finger = bar
+# inner_knuckle = proximal_phalanx
+# inner_finger = distal_phalanx
+# finger_pad = finger_tip
+
+mesh_files:
+  palm:
+    visual:
+      origin:
+        xyz: 0 0 0
+        rpy: 0 0 0
+      mesh: "package://rvl_robot_description/models/robotiq/2f_85/visual/robotiq_arg2f_base_link.stl"
+      scale: 1 1 1
+      material:
+        name: ""
+        color: "0.1 0.1 0.1 1"
+    collision:
+      origin:
+        xyz: 0 0 0
+        rpy: 0 0 0
+      mesh: "package://rvl_robot_description/models/robotiq/2f_85/collision/robotiq_arg2f_base_link.stl"
+      scale: 1 1 1
+
+  knuckle:
+    visual:
+      origin:
+        xyz: 0 0 0
+        rpy: 0 0 0
+      mesh: "package://rvl_robot_description/models/robotiq/2f_85/visual/robotiq_arg2f_85_outer_knuckle.dae"
+      scale: 0.001 0.001 0.001
+      material:
+        name: ""
+        color: "0.792156862745098 0.819607843137255 0.933333333333333 1"
+    collision:
+      origin:
+        xyz: 0 0 0
+        rpy: 0 0 0
+      mesh: "package://rvl_robot_description/models/robotiq/2f_85/collision/robotiq_arg2f_85_outer_knuckle.dae"
+      scale: 0.001 0.001 0.001
+
+  bar:
+    visual:
+      origin:
+        xyz: 0 0 0
+        rpy: 0 0 0
+      mesh: "package://rvl_robot_description/models/robotiq/2f_85/visual/robotiq_arg2f_85_outer_finger.dae"
+      scale: 0.001 0.001 0.001
+      material:
+        name: ""
+        color: "0.1 0.1 0.1 1"
+    collision:
+      origin:
+        xyz: 0 0 0
+        rpy: 0 0 0
+      mesh: "package://rvl_robot_description/models/robotiq/2f_85/collision/robotiq_arg2f_85_outer_finger.dae"
+      scale: 0.001 0.001 0.001
+
+  proximal_phalanx:
+    visual:
+      origin:
+        xyz: 0 0 0
+        rpy: 0 0 0
+      mesh: "package://rvl_robot_description/models/robotiq/2f_85/visual/robotiq_arg2f_85_inner_knuckle.dae"
+      scale: 0.001 0.001 0.001
+      material:
+        name: ""
+        color: "0.1 0.1 0.1 1"
+    collision:
+      origin:
+        xyz: 0 0 0
+        rpy: 0 0 0
+      mesh: "package://rvl_robot_description/models/robotiq/2f_85/collision/robotiq_arg2f_85_inner_knuckle.dae"
+      scale: 0.001 0.001 0.001
+
+  distal_phalanx:
+    visual:
+      origin:
+        xyz: 0 0 0
+        rpy: 0 0 0
+      mesh: "package://rvl_robot_description/models/robotiq/2f_85/visual/robotiq_arg2f_85_inner_finger.dae"
+      scale: 0.001 0.001 0.001
+      material:
+        name: ""
+        color: "0.1 0.1 0.1 1"
+    collision:
+      origin:
+        xyz: 0 0 0
+        rpy: 0 0 0
+      mesh: "package://rvl_robot_description/models/robotiq/2f_85/collision/robotiq_arg2f_85_inner_finger.dae"
+      scale: 0.001 0.001 0.001
+
+  finger_tip:
+    box_dimensions: 0.022 0.00635 0.0375
+    visual:
+      origin:
+        xyz: 0 0 0
+        rpy: 0 0 0
+      material:
+        name: ""
+        color: "0.9 0.9 0.9 1"
+    collision:
+      origin:
+        xyz: 0 0 0
+        rpy: 0 0 0
+      material:
+        name: ""
+        color: "0.9 0.0 0.0 1"

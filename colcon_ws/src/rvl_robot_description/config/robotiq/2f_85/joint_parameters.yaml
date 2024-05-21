@@ -1,0 +1,116 @@
+# base_link = palm
+# outer_knuckle = knuckle
+# outer_finger = bar
+# inner_knuckle = proximal_phalanx
+# inner_finger = distal_phalanx
+# finger_pad = finger_tip
+
+link_names:
+  palm: &base "robotiq_2f_base_palm"
+  knuckle: &knuckle "knuckle_link"
+  bar: &bar "bar_link"
+  proximal_phalanx: &pphal "proximal_phalanx_link"
+  distal_phalanx: &dphal "distal_phalanx_link"
+  finger_tip: &tip "finger_tip_link"
+
+joint_names:
+  base_to_knuckle: &driven "knuckle_joint"
+  base_to_proximal: "proximal_joint"
+  knuckle_to_bar: "bar_joint"
+  bar_to_distal: "distal_joint"
+  distal_to_tip: "tip_joint"
+
+joint_definitions:
+  # driven joint
+  base_to_knuckle:
+    # type: "revolute"
+    type: "fixed"
+    origin:
+      xyz: 0 -0.0306011 0.054904
+      rpy: 0 0 3.141592654
+    parent_link: *base
+    child_link: *knuckle
+    axis: 1 0 0
+    limit:
+      lower: 0.0
+      upper: 0.8
+      velocity: 0.5
+      effort: 1000
+
+  # will prepend "right" to it
+  base_to_knuckle_mimic:
+    # type: "revolute"
+    type: "fixed"
+    origin:
+      xyz: 0 0.0306011 0.054904
+      rpy: 0 0 0
+    parent_link: *base
+    child_link: *knuckle
+    axis: 1 0 0
+    limit:
+      lower: 0.0
+      upper: 0.8
+      velocity: 0.5
+      effort: 1000
+    mimic:
+      joint: *driven
+      multiplier: 1
+      offset: 0
+
+  knuckle_to_bar:
+    type: "fixed"
+    origin:
+      xyz: 0 0.0315 -0.0041
+      rpy: 0 0 0
+    parent_link: *knuckle
+    child_link: *bar
+    axis: 1 0 0
+
+  bar_to_distal:
+    # type: "revolute"
+    type: "fixed"
+    origin:
+      xyz: 0 0.0061 0.0471
+      rpy: 0 0 0
+    parent_link: *bar
+    child_link: *dphal
+    axis: 1 0 0
+    limit:
+      lower: -0.8757
+      upper: 0
+      velocity: 0.5
+      effort: 1000
+    mimic:
+      joint: *driven
+      multiplier: -1
+      offset: 0
+
+  distal_to_tip:
+    type: "fixed"
+    origin:
+      xyz: 0 -0.0220203446692936 0.03242
+      rpy: 0 0 0
+    parent_link: *dphal
+    child_link: *tip
+    axis: 0 0 1
+
+  base_to_proximal:
+    # type: "revolute"
+    type: "fixed"
+    # special case to handle reflection
+    origin:
+      xyz: "0 ${reflect * -0.0127} 0.06142"
+      rpy: "0 0 ${(1 + reflect) * pi / 2}"
+    parent_link: *base
+    child_link: *pphal
+    axis: 1 0 0
+    limit:
+      lower: 0
+      upper: 0.8757
+      velocity: 0.5
+      effort: 1000
+    mimic:
+      joint: *driven
+      multiplier: 1
+      offset: 0
+

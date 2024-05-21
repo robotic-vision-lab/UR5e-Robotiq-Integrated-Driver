@@ -1,0 +1,285 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find rvl_robot_description)/xacro/robotiq/include/robotiq_2f_transmissions.xacro" />
+    <xacro:include filename="$(find rvl_robot_description)/xacro/robotiq/include/robotiq_2f_common.xacro" />
+
+    <xacro:macro name="robotiq_2f_gripper" params="
+        prefix
+        stroke
+        transmission_hw_interface:=hardware_interface/EffortJointInterface
+        parent_link:=''
+        attachment_x:=0.0
+        attachment_y:=0.0
+        attachment_z:=0.0
+        attachment_roll:=0.0
+        attachment_pitch:=0.0
+        attachment_yaw:=0.0">
+
+        <!-- load stroke-specified configurations -->
+        <xacro:load_robotiq_config
+            joint_parameters_file="$(find rvl_robot_description)/config/robotiq/2f_${stroke}/joint_parameters.yaml"
+            physical_parameters_file="$(find rvl_robot_description)/config/robotiq/2f_${stroke}/physical_parameters.yaml"
+            visual_parameters_file="$(find rvl_robot_description)/config/robotiq/2f_${stroke}/visual_parameters.yaml" />
+
+        <!-- attached hardware interface for ros_control -->
+        <xacro:robotiq_2f_transmission prefix="${prefix}" hw_interface="${transmission_hw_interface}" driven_joint="${prefix}${knuckle_joint_name}" />
+
+        <!-- LINK MACROS -->
+
+        <xacro:macro name="knuckle_link" params="prefix fingerprefix">
+            <link name="${prefix}${fingerprefix}${knuckle_link_name}">
+                <visual>
+                    <origin xyz="${knuckle_visual_xyz}" rpy="${knuckle_visual_rpy}" />
+                    <geometry>
+                        <mesh filename="${knuckle_visual_mesh_file}" scale="${knuckle_visual_mesh_scale}" />
+                    </geometry>
+                    <material name="${knuckle_material_name}">
+                        <color rgba="${knuckle_material_color}" />
+                    </material>
+                </visual>
+                <collision>
+                    <origin xyz="${knuckle_collision_xyz}" rpy="${knuckle_collision_rpy}" />
+                    <geometry>
+                        <mesh filename="${knuckle_collision_mesh_file}" scale="${knuckle_collision_mesh_scale}" />
+                    </geometry>
+                </collision>
+                <inertial>
+                    <origin xyz="${knuckle_inertial_xyz}" rpy="${knuckle_inertial_rpy}" />
+                    <mass value="${knuckle_mass}" />
+                    <inertia ixx="${knuckle_ixx}" ixy="${knuckle_ixy}" ixz="${knuckle_ixz}" iyy="${knuckle_iyy}" iyz="${knuckle_iyz}" izz="${knuckle_izz}" />
+                </inertial>
+            </link>
+        </xacro:macro>
+
+        <xacro:macro name="bar_link" params="prefix fingerprefix">
+            <link name="${prefix}${fingerprefix}${bar_link_name}">
+                <visual>
+                    <origin xyz="${bar_visual_xyz}" rpy="${bar_visual_rpy}" />
+                    <geometry>
+                        <mesh filename="${bar_visual_mesh_file}" scale="${bar_visual_mesh_scale}" />
+                    </geometry>
+                    <material name="${bar_material_name}">
+                        <color rgba="${bar_material_color}" />
+                    </material>
+                </visual>
+                <collision>
+                    <origin xyz="${bar_collision_xyz}" rpy="${bar_collision_rpy}" />
+                    <geometry>
+                        <mesh filename="${bar_collision_mesh_file}" scale="${bar_collision_mesh_scale}" />
+                    </geometry>
+                </collision>
+                <inertial>
+                    <origin xyz="${bar_inertial_xyz}" rpy="${bar_inertial_rpy}" />
+                    <mass value="${bar_mass}" />
+                    <inertia ixx="${bar_ixx}" ixy="${bar_ixy}" ixz="${bar_ixz}" iyy="${bar_iyy}" iyz="${bar_iyz}" izz="${bar_izz}" />
+                </inertial>
+            </link>
+        </xacro:macro>
+
+        <xacro:macro name="proximal_phalanx_link" params="prefix fingerprefix">
+            <link name="${prefix}${fingerprefix}${proximal_phalanx_link_name}">
+                <visual>
+                    <origin xyz="${proximal_phalanx_visual_xyz}" rpy="${proximal_phalanx_visual_rpy}" />
+                    <geometry>
+                        <mesh filename="${proximal_phalanx_visual_mesh_file}" scale="${proximal_phalanx_visual_mesh_scale}" />
+                    </geometry>
+                    <material name="${proximal_phalanx_material_name}">
+                        <color rgba="${proximal_phalanx_material_color}" />
+                    </material>
+                </visual>
+                <collision>
+                    <origin xyz="${proximal_phalanx_collision_xyz}" rpy="${proximal_phalanx_collision_rpy}" />
+                    <geometry>
+                        <mesh filename="${proximal_phalanx_collision_mesh_file}" scale="${proximal_phalanx_collision_mesh_scale}" />
+                    </geometry>
+                </collision>
+                <inertial>
+                    <origin xyz="${proximal_phalanx_inertial_xyz}" rpy="${proximal_phalanx_inertial_rpy}" />
+                    <mass value="${proximal_phalanx_mass}" />
+                    <inertia ixx="${proximal_phalanx_ixx}" ixy="${proximal_phalanx_ixy}" ixz="${proximal_phalanx_ixz}" iyy="${proximal_phalanx_iyy}" iyz="${proximal_phalanx_iyz}" izz="${proximal_phalanx_izz}" />
+                </inertial>
+            </link>
+        </xacro:macro>
+
+        <xacro:macro name="distal_phalanx_link" params="prefix fingerprefix">
+            <link name="${prefix}${fingerprefix}${distal_phalanx_link_name}">
+                <visual>
+                    <origin xyz="${distal_phalanx_visual_xyz}" rpy="${distal_phalanx_visual_rpy}" />
+                    <geometry>
+                        <mesh filename="${distal_phalanx_visual_mesh_file}" scale="${distal_phalanx_visual_mesh_scale}" />
+                    </geometry>
+                    <material name="${distal_phalanx_material_name}">
+                        <color rgba="${distal_phalanx_material_color}" />
+                    </material>
+                </visual>
+                <collision>
+                    <origin xyz="${distal_phalanx_collision_xyz}" rpy="${distal_phalanx_collision_rpy}" />
+                    <geometry>
+                        <mesh filename="${distal_phalanx_collision_mesh_file}" scale="${distal_phalanx_collision_mesh_scale}" />
+                    </geometry>
+                </collision>
+                <inertial>
+                    <origin xyz="${distal_phalanx_inertial_xyz}" rpy="${distal_phalanx_inertial_rpy}" />
+                    <mass value="${distal_phalanx_mass}" />
+                    <inertia ixx="${distal_phalanx_ixx}" ixy="${distal_phalanx_ixy}" ixz="${distal_phalanx_ixz}" iyy="${distal_phalanx_iyy}" iyz="${distal_phalanx_iyz}" izz="${distal_phalanx_izz}" />
+                </inertial>
+            </link>
+        </xacro:macro>
+
+        <xacro:macro name="finger_tip_link" params="prefix fingerprefix">
+            <link name="${prefix}${fingerprefix}${finger_tip_link_name}">
+                <visual>
+                    <origin xyz="${finger_tip_visual_xyz}" rpy="${finger_tip_visual_rpy}" />
+                    <geometry>
+                        <box size="${finger_tip_box_dimension}" />
+                    </geometry>
+                    <material name="${finger_tip_visual_material_name}">
+                        <color rgba="${finger_tip_visual_material_color}" />
+                    </material>
+                </visual>
+                <collision>
+                    <origin xyz="${finger_tip_collision_xyz}" rpy="${finger_tip_collision_rpy}" />
+                    <geometry>
+                        <box size="${finger_tip_box_dimension}" />
+                    </geometry>
+                    <material name="${finger_tip_collision_material_name}">
+                        <color rgba="${finger_tip_collision_material_color}" />
+                    </material>
+                </collision>
+            </link>
+        </xacro:macro>
+
+        <!-- define a finger as a set of links from previous macros -->
+        <xacro:macro name="finger_links" params="prefix fingerprefix">
+            <xacro:knuckle_link prefix="${prefix}" fingerprefix="${fingerprefix}" />
+            <xacro:bar_link prefix="${prefix}" fingerprefix="${fingerprefix}" />
+            <xacro:proximal_phalanx_link prefix="${prefix}" fingerprefix="${fingerprefix}" />
+            <xacro:distal_phalanx_link prefix="${prefix}" fingerprefix="${fingerprefix}" />
+            <xacro:finger_tip_link prefix="${prefix}" fingerprefix="${fingerprefix}" />
+        </xacro:macro>
+
+        <!-- JOINT MACROS -->
+
+        <xacro:macro name="bar_joint" params="prefix fingerprefix">
+            <joint name="${prefix}${fingerprefix}${bar_joint_name}" type="${bar_joint_type}">
+                <origin xyz="${bar_joint_origin_xyz}" rpy="${bar_joint_origin_rpy}" />
+                <parent link="${prefix}${fingerprefix}${bar_joint_parent_link}" />
+                <child link="${prefix}${fingerprefix}${bar_joint_child_link}" />
+                <axis xyz="${bar_joint_axis}" />
+            </joint>
+        </xacro:macro>
+
+        <xacro:macro name="finger_tip_joint" params="prefix fingerprefix">
+            <joint name="${prefix}${fingerprefix}${finger_tip_joint_name}" type="${finger_tip_joint_type}">
+                <origin xyz="${finger_tip_joint_origin_xyz}" rpy="${finger_tip_joint_origin_rpy}" />
+                <parent link="${prefix}${fingerprefix}${finger_tip_joint_parent_link}" />
+                <child link="${prefix}${fingerprefix}${finger_tip_joint_child_link}" />
+                <axis xyz="${finger_tip_joint_axis}" />
+            </joint>
+        </xacro:macro>
+
+        <xacro:macro name="distal_phalanx_joint" params="prefix fingerprefix">
+            <joint name="${prefix}${fingerprefix}${distal_phalanx_joint_name}" type="${distal_phalanx_joint_type}">
+                <origin xyz="${distal_phalanx_joint_origin_xyz}" rpy="${distal_phalanx_joint_origin_rpy}" />
+                <parent link="${prefix}${fingerprefix}${distal_phalanx_joint_parent_link}" />
+                <child link="${prefix}${fingerprefix}${distal_phalanx_joint_child_link}" />
+                <axis xyz="${distal_phalanx_joint_axis}" />
+                <limit lower="${distal_phalanx_joint_lower_limit}" upper="${distal_phalanx_joint_upper_limit}" velocity="${distal_phalanx_joint_velocity}" effort="${distal_phalanx_joint_effort}" />
+                <mimic joint="${prefix}${distal_phalanx_joint_mimic_joint}" multiplier="${distal_phalanx_joint_mimic_multiplier}" offset="${distal_phalanx_joint_mimic_offset}" />
+            </joint>
+        </xacro:macro>
+
+        <xacro:macro name="proximal_phalanx_joint" params="prefix fingerprefix reflect">
+            <joint name="${prefix}${fingerprefix}${proximal_phalanx_joint_name}" type="${proximal_phalanx_joint_type}">
+                <xacro:if value="${stroke == 85}">
+                    <origin xyz="0 ${reflect * -0.0127} 0.06142" rpy="0 0 ${(1 + reflect) * pi / 2}" />
+                </xacro:if>
+                <xacro:if value="${stroke == 140}">
+                    <origin xyz="0 ${reflect * -0.0127} 0.06142" rpy="${pi / 2 + .725} 0 ${(reflect - 1) * pi / 2}" />
+                </xacro:if>
+                <parent link="${prefix}${proximal_phalanx_joint_parent_link}" />
+                <child link="${prefix}${fingerprefix}${proximal_phalanx_joint_child_link}" />
+                <axis xyz="${proximal_phalanx_joint_axis}" />
+                <limit lower="${proximal_phalanx_joint_lower_limit}" upper="${proximal_phalanx_joint_upper_limit}" velocity="${proximal_phalanx_joint_velocity}" effort="${proximal_phalanx_joint_effort}" />
+                <mimic joint="${prefix}${proximal_phalanx_joint_mimic_joint}" multiplier="${proximal_phalanx_joint_mimic_multiplier}" offset="${proximal_phalanx_joint_mimic_offset}" />
+            </joint>
+        </xacro:macro>
+
+        <!-- define joints as a collection macro -->
+        <xacro:macro name="finger_joints" params="prefix fingerprefix reflect">
+            <xacro:bar_joint prefix="${prefix}" fingerprefix="${fingerprefix}" />
+            <xacro:distal_phalanx_joint prefix="${prefix}" fingerprefix="${fingerprefix}" />
+            <xacro:proximal_phalanx_joint prefix="${prefix}" fingerprefix="${fingerprefix}" reflect="${reflect}" />
+            <xacro:finger_tip_joint prefix="${prefix}" fingerprefix="${fingerprefix}" />
+        </xacro:macro>
+
+        <!-- ACTUALLY DEFINING THE ROBOT -->
+
+        <!-- BASE PALM -->
+        <link name="${prefix}${palm_link_name}">
+            <visual>
+                <origin xyz="${palm_visual_xyz}" rpy="${palm_visual_rpy}" />
+                <geometry>
+                    <mesh filename="${palm_visual_mesh_file}" scale="${palm_visual_mesh_scale}" />
+                </geometry>
+                <material name="${palm_material_name}">
+                    <color rgba="${palm_material_color}" />
+                </material>
+            </visual>
+            <collision>
+                <origin xyz="${palm_collision_xyz}" rpy="${palm_collision_rpy}" />
+                <geometry>
+                    <mesh filename="${palm_collision_mesh_file}" scale="${palm_collision_mesh_scale}" />
+                </geometry>
+            </collision>
+            <inertial>
+                <origin xyz="${palm_inertial_xyz}" rpy="${palm_inertial_rpy}" />
+                <mass value="${palm_mass}" />
+                <inertia ixx="${palm_ixx}" ixy="${palm_ixy}" ixz="${palm_ixz}" iyy="${palm_iyy}" iyz="${palm_iyz}" izz="${palm_izz}" />
+            </inertial>
+        </link>
+
+        <!-- LEFT FINGER -->
+        <xacro:finger_links prefix="${prefix}" fingerprefix="left_" />
+        <xacro:finger_joints prefix="${prefix}" fingerprefix="left_" reflect="1.0" />
+        <joint name="${prefix}${knuckle_joint_name}" type="${knuckle_joint_type}">
+            <origin xyz="${knuckle_joint_origin_xyz}" rpy="${knuckle_joint_origin_rpy}" />
+            <parent link="${prefix}${knuckle_joint_parent_link}" />
+            <child link="${prefix}left_${knuckle_joint_child_link}" />
+            <axis xyz="${knuckle_joint_axis}" />
+            <limit lower="${knuckle_joint_lower_limit}" upper="${knuckle_joint_upper_limit}" velocity="${knuckle_joint_velocity}" effort="${knuckle_joint_effort}" />
+        </joint>
+
+        <!-- RIGHT FINGER -->
+        <xacro:finger_links prefix="${prefix}" fingerprefix="right_" />
+        <xacro:finger_joints prefix="${prefix}" fingerprefix="right_" reflect="-1.0" />
+        <joint name="${prefix}right_${knuckle_joint_name}" type="${mimic_knuckle_joint_type}">
+            <origin xyz="${mimic_knuckle_joint_origin_xyz}" rpy="${mimic_knuckle_joint_origin_rpy}" />
+            <parent link="${prefix}${mimic_knuckle_joint_parent_link}" />
+            <child link="${prefix}right_${mimic_knuckle_joint_child_link}" />
+            <axis xyz="${mimic_knuckle_joint_axis}" />
+            <limit lower="${mimic_knuckle_joint_lower_limit}" upper="${mimic_knuckle_joint_upper_limit}" velocity="${mimic_knuckle_joint_velocity}" effort="${mimic_knuckle_joint_effort}" />
+            <mimic joint="${prefix}${mimic_knuckle_joint_mimic_joint}" multiplier="${mimic_knuckle_joint_mimic_multiplier}" offset="${mimic_knuckle_joint_mimic_offset}" />
+        </joint>
+
+        <!-- ATTACHMENT WHEN REQUIRED -->
+        <xacro:if value="${parent_link != ''}">
+            <joint name="${parent_link}-${palm_link_name}" type="fixed">
+                <parent link="${parent_link}"/>
+                <child link="${prefix}${palm_link_name}"/>
+                <origin xyz="${attachment_x} ${attachment_y} ${attachment_z}" rpy="${attachment_roll} ${attachment_pitch} ${attachment_yaw}"/>
+            </joint>
+        </xacro:if>
+
+        <xacro:if value="${parent_link == ''}">
+            <link name="base_link"/>
+            <joint name="robotiq_2f_to_parent" type="fixed">
+                <parent link="base_link"/>
+                <child link="${prefix}${palm_link_name}"/>
+                <origin xyz="${attachment_x} ${attachment_y} ${attachment_z}" rpy="${attachment_roll} ${attachment_pitch} ${attachment_yaw}"/>
+            </joint>
+        </xacro:if>
+
+    </xacro:macro>
+</robot>

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robotiq_2f_85">
+
+    <xacro:arg name="prefix" default="" />
+    <xacro:arg name="stroke" default="85" />
+    <xacro:arg name="transmission_hw_interface" default="hardware_interface/EffortJointInterface" />
+    <xacro:arg name="parent_link" default="" />
+    <xacro:arg name="attachment_x" default="0.0" />
+    <xacro:arg name="attachment_y" default="0.0" />
+    <xacro:arg name="attachment_z" default="0.0" />
+    <xacro:arg name="attachment_roll" default="0.0" />
+    <xacro:arg name="attachment_pitch" default="0.0" />
+    <xacro:arg name="attachment_yaw" default="0.0" />
+
+    <!-- import main macro -->
+    <xacro:include filename="$(find rvl_robot_description)/xacro/robotiq/include/robotiq_2f_macro.xacro" />
+
+    <!-- gripper -->
+    <xacro:robotiq_2f_gripper
+        prefix="$(arg prefix)"
+        stroke="$(arg stroke)"
+        transmission_hw_interface="$(arg transmission_hw_interface)"
+        parent_link="$(arg parent_link)"
+        attachment_x="$(arg attachment_x)"
+        attachment_y="$(arg attachment_y)"
+        attachment_z="$(arg attachment_z)"
+        attachment_roll="$(arg attachment_roll)"
+        attachment_pitch="$(arg attachment_pitch)"
+        attachment_yaw="$(arg attachment_yaw)" />
+</robot>

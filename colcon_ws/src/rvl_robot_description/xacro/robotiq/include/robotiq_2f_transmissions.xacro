@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <xacro:macro name="robotiq_2f_transmission" params="prefix hw_interface driven_joint">
+        <transmission name="${prefix}finger_joint_trans">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="${prefix}${driven_joint}">
+                <hardwareInterface>${hw_interface}</hardwareInterface>
+            </joint>
+            <actuator name="${prefix}${driven_joint}_motor">
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+    </xacro:macro>
+
+</robot>

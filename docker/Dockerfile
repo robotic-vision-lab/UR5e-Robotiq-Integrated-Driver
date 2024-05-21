@@ -113,4 +113,8 @@ RUN source /opt/ros/${ROS_DISTRO}/setup.bash && \
 
 WORKDIR ${COLCON_WS}
 
-RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc && \
+    echo "source ${ROS_WS}/install/setup.bash" >> ~/.bashrc && \
+    echo "source /usr/share/colcon_cd/function/colcon_cd.sh" >> ~/.bashrc && \
+    echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> ~/.bashrc && \
+    echo "export _colcon_cd_root=/opt/ros/${ROS_DISTRO}/" >> ~/.bashrc
